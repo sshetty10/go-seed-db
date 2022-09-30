@@ -1,0 +1,25 @@
+# .gqlgen.yml example
+#
+# Refer to https://gqlgen.com/config/
+# for detailed .gqlgen.yml documentation.
+
+schema:
+- schema.graphql
+exec:
+  filename: generated.go
+model:
+  filename: models_gen.go
+resolver:
+  filename: resolver.go
+  type: Resolver
+autobind:
+  - github.com/sshetty10/go-seed-db/model
+  #- git-pss.uberultrasdlc.com/foundation/service/gqlutils //in case of common models from other projects
+
+# models:
+  # IPAddressInput: // from gqlutils imported models
+    # fields:
+      #ipv4Address:
+        # fieldName: IPv4Address
+      # ipv6Address:
+        # fieldName: IPv6Address

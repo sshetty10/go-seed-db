@@ -1,0 +1,11 @@
+type Trainer {
+    id: String!
+    name: String!
+    age: Int!
+    city: String!
+}
+
+type Query {
+    Trainers: [Trainer!]!
+    TrainerByID(id: String!): Trainer!
+}
