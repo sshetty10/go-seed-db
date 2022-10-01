@@ -1,5 +1,12 @@
 package main
 
+import (
+	"context"
+
+	"github.com/sshetty10/go-seed-db/generated"
+	"github.com/sshetty10/go-seed-db/model"
+)
+
 // THIS CODE IS A STARTING POINT ONLY. IT WILL NOT BE UPDATED WITH SCHEMA CHANGES.
 
 type Resolver struct {
@@ -17,7 +24,7 @@ func (api *API) NewResolver() *Resolver {
 //Query returns the QueryResolver interface
 //QueryResolver is an interface in generated.go
 
-/*func (r *Resolver) Query() QueryResolver {
+func (r *Resolver) Query() generated.QueryResolver {
 	return &queryResolver{r}
 }
 
@@ -42,4 +49,4 @@ func (r *queryResolver) TrainerByID(ctx context.Context, id string) (*model.Trai
 	}
 
 	return t, nil
-}*/
+}

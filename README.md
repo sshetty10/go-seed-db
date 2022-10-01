@@ -17,6 +17,9 @@ mongo
 7. ./go-seed-db (Do not do go run main.go)
 8. MyAPIs collection in Postman has all the APIs (sameeksha.shetty@neustar.biz)
 
+### Rest
+http://localhost:8080/v1/trainer
+http://localhost:8080/v1/trainer/b6fb8b4a-fbc1-498b-9aa7-b6d8770daf7d
 
 ### GQL
 Generate GQL models, generated.go, gqlgenyml:
@@ -26,7 +29,7 @@ GQL playground
 GetTrainerByID
 
 {
-	TrainerByID(id:"5dfa7863e1c2bb128f76d7a1"){
+	TrainerByID(id:"b6fb8b4a-fbc1-498b-9aa7-b6d8770daf7d"){
     name
   }
 }

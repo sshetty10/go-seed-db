@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	"gitlab.com/my-repos/go-seed-db/model"
+	"github.com/sshetty10/go-seed-db/model"
 )
 
 func (a *API) ListTrainers(w http.ResponseWriter, r *http.Request) {

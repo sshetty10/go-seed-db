@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 
-	"gitlab.com/my-repos/go-seed-db/model"
+	"github.com/sshetty10/go-seed-db/model"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"
@@ -24,7 +24,7 @@ func (api *API) ConnectDB(dbaddr string) (func(), error) {
 	api.logger.Println("Connecting to Database")
 
 	db, err := gorm.Open(postgres.Open(dbaddr), &gorm.Config{
-		NamingStrategy: schema.NamingStrategy{TablePrefix: ".", SingularTable: false}})
+		NamingStrategy: schema.NamingStrategy{TablePrefix: "mydb.", SingularTable: false}})
 	if err != nil {
 		return nil, fmt.Errorf("unable to open Database: %w", err)
 	}
@@ -74,9 +74,9 @@ func (api *API) GetDBTrainerByName(name string) (*model.Trainer, error) {
 func (api *API) GetDBTrainerByID(id string) (*model.Trainer, error) {
 	trainer := &model.Trainer{}
 
-	query := api.db.Table("trainers") // dont need to do this
+	query := api.db.Table("trainers").Where("id=?", id) // dont need to do this
 
-	if err := query.First(trainer, id).Error; err != nil {
+	if err := query.First(trainer).Error; err != nil {
 		return nil, err
 	}
 

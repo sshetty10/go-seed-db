@@ -9,6 +9,7 @@ import (
 
 	"github.com/99designs/gqlgen/handler"
 	"github.com/gorilla/mux"
+	"github.com/sshetty10/go-seed-db/generated"
 	"gorm.io/gorm"
 )
 
@@ -20,7 +21,7 @@ type API struct {
 var (
 	mongourl = "localhost:27017"
 	dbname   = "platform"
-	pgaddr   = "host=ultrawaf.cluster-civmdcc4k4yd.us-east-1.rds.amazonaws.com dbname=ultrawaf sslmode=require user=ultraadmin password=jEJ38dHJanfijpJQjl8321JFQQApju"
+	pgaddr   = "host=localhost dbname=mydb user=scott password=tiger"
 )
 
 func main() {
@@ -39,12 +40,12 @@ func main() {
 	h.HandleFunc("/trainer", a.ListTrainers).Methods("GET")
 	h.HandleFunc("/trainer", a.CreateTrainer).Methods("POST")
 	h.HandleFunc("/trainer/{id:[a-z0-9]+}", a.DeleteTrainer).Methods("DELETE")
-	h.HandleFunc("/trainer/{id:[a-z0-9]+}", a.GetTrainer).Methods("GET")
+	h.HandleFunc("/trainer/{id:[a-z0-9-]+}", a.GetTrainer).Methods("GET")
 	h.HandleFunc("/cheese", a.SayCheese).Methods("GET")
 
 	//Playground second parameter must be the uri path to the graphql APIs
 	g.HandleFunc("/playground", handler.Playground("GraphQL playground", "/v2/gql"))
-	//g.HandleFunc("/gql", handler.GraphQL(NewExecutableSchema(Config{Resolvers: &Resolver{db: db}})))
+	g.HandleFunc("/gql", handler.GraphQL(generated.NewExecutableSchema(generated.Config{Resolvers: &Resolver{api: a}})))
 
 	log.Println("connect to http://localhost:8080/v2/playground for GraphQL playground")
 	err = http.ListenAndServe(":8080", r)
