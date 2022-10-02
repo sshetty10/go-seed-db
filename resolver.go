@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"strings"
 
 	"github.com/sshetty10/go-seed-db/generated"
 	"github.com/sshetty10/go-seed-db/model"
@@ -19,17 +20,6 @@ func (api *API) NewResolver() *Resolver {
 	return &Resolver{
 		api: api,
 	}
-}
-
-//Query returns the QueryResolver interface
-//QueryResolver is an interface in generated.go
-
-func (r *Resolver) Query() generated.QueryResolver {
-	return &queryResolver{r}
-}
-
-type queryResolver struct {
-	*Resolver
 }
 
 //needed a separate GQL trainer cause the ID field is primitive.ObjectID for Trainer
@@ -50,3 +40,33 @@ func (r *queryResolver) TrainerByID(ctx context.Context, id string) (*model.Trai
 
 	return t, nil
 }
+
+func (r *trainerResolver) LicenseState(ctx context.Context, trainer *model.Trainer) (string, error) {
+	licenseState := strings.Split(trainer.LicenseID, "-")[0]
+
+	//pprofed
+
+	/*idx := 0
+	for idx < len(trainer.LicenseID) {
+		if trainer.LicenseID[idx] == '-' {
+			break
+		}
+		idx++
+	}
+	licenseState := trainer.LicenseID[:idx]*/
+
+	return licenseState, nil
+}
+
+//Query returns the QueryResolver interface
+//QueryResolver is an interface in generated.go
+
+func (r *Resolver) Query() generated.QueryResolver {
+	return &queryResolver{r}
+}
+
+// Trainer returns generated.TrainerResolver implementation.
+func (r *Resolver) Trainer() generated.TrainerResolver { return &trainerResolver{r} }
+
+type queryResolver struct{ *Resolver }
+type trainerResolver struct{ *Resolver }

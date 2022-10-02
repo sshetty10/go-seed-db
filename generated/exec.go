@@ -37,6 +37,7 @@ type Config struct {
 
 type ResolverRoot interface {
 	Query() QueryResolver
+	Trainer() TrainerResolver
 }
 
 type DirectiveRoot struct {
@@ -49,16 +50,21 @@ type ComplexityRoot struct {
 	}
 
 	Trainer struct {
-		Age  func(childComplexity int) int
-		City func(childComplexity int) int
-		ID   func(childComplexity int) int
-		Name func(childComplexity int) int
+		Age          func(childComplexity int) int
+		City         func(childComplexity int) int
+		ID           func(childComplexity int) int
+		LicenseID    func(childComplexity int) int
+		LicenseState func(childComplexity int) int
+		Name         func(childComplexity int) int
 	}
 }
 
 type QueryResolver interface {
 	Trainers(ctx context.Context) ([]*model.Trainer, error)
 	TrainerByID(ctx context.Context, id string) (*model.Trainer, error)
+}
+type TrainerResolver interface {
+	LicenseState(ctx context.Context, obj *model.Trainer) (string, error)
 }
 
 type executableSchema struct {
@@ -115,6 +121,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Trainer.ID(childComplexity), true
+
+	case "Trainer.licenseID":
+		if e.complexity.Trainer.LicenseID == nil {
+			break
+		}
+
+		return e.complexity.Trainer.LicenseID(childComplexity), true
+
+	case "Trainer.licenseState":
+		if e.complexity.Trainer.LicenseState == nil {
+			break
+		}
+
+		return e.complexity.Trainer.LicenseState(childComplexity), true
 
 	case "Trainer.name":
 		if e.complexity.Trainer.Name == nil {
@@ -180,6 +200,8 @@ var sources = []*ast.Source{
     name: String!
     age: Int!
     city: String!
+    licenseID: String!
+    licenseState: String!
 }
 
 type Query {
@@ -308,6 +330,10 @@ func (ec *executionContext) fieldContext_Query_Trainers(ctx context.Context, fie
 				return ec.fieldContext_Trainer_age(ctx, field)
 			case "city":
 				return ec.fieldContext_Trainer_city(ctx, field)
+			case "licenseID":
+				return ec.fieldContext_Trainer_licenseID(ctx, field)
+			case "licenseState":
+				return ec.fieldContext_Trainer_licenseState(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Trainer", field.Name)
 		},
@@ -362,6 +388,10 @@ func (ec *executionContext) fieldContext_Query_TrainerByID(ctx context.Context, 
 				return ec.fieldContext_Trainer_age(ctx, field)
 			case "city":
 				return ec.fieldContext_Trainer_city(ctx, field)
+			case "licenseID":
+				return ec.fieldContext_Trainer_licenseID(ctx, field)
+			case "licenseState":
+				return ec.fieldContext_Trainer_licenseState(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Trainer", field.Name)
 		},
@@ -678,6 +708,94 @@ func (ec *executionContext) fieldContext_Trainer_city(ctx context.Context, field
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Trainer_licenseID(ctx context.Context, field graphql.CollectedField, obj *model.Trainer) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Trainer_licenseID(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.LicenseID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Trainer_licenseID(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Trainer",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Trainer_licenseState(ctx context.Context, field graphql.CollectedField, obj *model.Trainer) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Trainer_licenseState(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Trainer().LicenseState(rctx, obj)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Trainer_licenseState(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Trainer",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type String does not have child fields")
 		},
@@ -2569,29 +2687,56 @@ func (ec *executionContext) _Trainer(ctx context.Context, sel ast.SelectionSet, 
 			out.Values[i] = ec._Trainer_id(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
 		case "name":
 
 			out.Values[i] = ec._Trainer_name(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
 		case "age":
 
 			out.Values[i] = ec._Trainer_age(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
 		case "city":
 
 			out.Values[i] = ec._Trainer_city(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
+		case "licenseID":
+
+			out.Values[i] = ec._Trainer_licenseID(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&invalids, 1)
+			}
+		case "licenseState":
+			field := field
+
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Trainer_licenseState(ctx, field, obj)
+				if res == graphql.Null {
+					atomic.AddUint32(&invalids, 1)
+				}
+				return res
+			}
+
+			out.Concurrently(i, func() graphql.Marshaler {
+				return innerFunc(ctx)
+
+			})
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

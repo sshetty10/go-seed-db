@@ -17,3 +17,9 @@ model:
 
 autobind:
   - github.com/sshetty10/go-seed-db/model
+
+models:
+  Trainer:
+    fields:
+      licenseState:
+        resolver: true

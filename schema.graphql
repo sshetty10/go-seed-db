@@ -3,6 +3,8 @@ type Trainer {
     name: String!
     age: Int!
     city: String!
+    licenseID: String!
+    licenseState: String!
 }
 
 type Query {
