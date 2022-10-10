@@ -6,5 +6,5 @@ type Trainer struct {
 	Age          int    `json:"age"`
 	City         string `json:"city"`
 	LicenseID    string `json:"licenseID"`
-	LicenseState string `json:"licenseState"`
+	LicenseState string `json:"licenseState" gorm:"-"`
 }

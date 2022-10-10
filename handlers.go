@@ -62,7 +62,7 @@ func (a *API) CreateTrainer(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	respondWithJSON(w, http.StatusCreated, &t)
+	respondWithJSON(w, http.StatusCreated, t)
 }
 
 func (a *API) SayCheese(w http.ResponseWriter, r *http.Request) {
@@ -85,7 +85,7 @@ func (a *API) GetTrainerFirstName(w http.ResponseWriter, r *http.Request) {
 	respondWithJSON(w, http.StatusOK, t)
 }
 
-//Response structure
+// Response structure
 type Response struct {
 	Data   interface{} `json:"data"`
 	Errors []string    `json:"errors"`

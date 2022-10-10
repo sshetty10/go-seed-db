@@ -1,1 +1,3 @@
 go-seed-db
+*.test
+*.cpu

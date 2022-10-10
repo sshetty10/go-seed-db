@@ -82,19 +82,19 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 	_ = ec
 	switch typeName + "." + field {
 
-	case "Query.TrainerByID":
+	case "Query.trainerByID":
 		if e.complexity.Query.TrainerByID == nil {
 			break
 		}
 
-		args, err := ec.field_Query_TrainerByID_args(context.TODO(), rawArgs)
+		args, err := ec.field_Query_trainerByID_args(context.TODO(), rawArgs)
 		if err != nil {
 			return 0, false
 		}
 
 		return e.complexity.Query.TrainerByID(childComplexity, args["id"].(string)), true
 
-	case "Query.Trainers":
+	case "Query.trainers":
 		if e.complexity.Query.Trainers == nil {
 			break
 		}
@@ -205,8 +205,8 @@ var sources = []*ast.Source{
 }
 
 type Query {
-    Trainers: [Trainer!]!
-    TrainerByID(id: String!): Trainer!
+    trainers: [Trainer!]!
+    trainerByID(id: String!): Trainer!
 }`, BuiltIn: false},
 }
 var parsedSchema = gqlparser.MustLoadSchema(sources...)
@@ -214,21 +214,6 @@ var parsedSchema = gqlparser.MustLoadSchema(sources...)
 // endregion ************************** generated!.gotpl **************************
 
 // region    ***************************** args.gotpl *****************************
-
-func (ec *executionContext) field_Query_TrainerByID_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 string
-	if tmp, ok := rawArgs["id"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-		arg0, err = ec.unmarshalNString2string(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["id"] = arg0
-	return args, nil
-}
 
 func (ec *executionContext) field_Query___type_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
@@ -242,6 +227,21 @@ func (ec *executionContext) field_Query___type_args(ctx context.Context, rawArgs
 		}
 	}
 	args["name"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_trainerByID_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
 	return args, nil
 }
 
@@ -283,8 +283,8 @@ func (ec *executionContext) field___Type_fields_args(ctx context.Context, rawArg
 
 // region    **************************** field.gotpl *****************************
 
-func (ec *executionContext) _Query_Trainers(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Query_Trainers(ctx, field)
+func (ec *executionContext) _Query_trainers(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_trainers(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -314,7 +314,7 @@ func (ec *executionContext) _Query_Trainers(ctx context.Context, field graphql.C
 	return ec.marshalNTrainer2ᚕᚖgithubᚗcomᚋsshetty10ᚋgoᚑseedᚑdbᚋmodelᚐTrainerᚄ(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Query_Trainers(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Query_trainers(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Query",
 		Field:      field,
@@ -341,8 +341,8 @@ func (ec *executionContext) fieldContext_Query_Trainers(ctx context.Context, fie
 	return fc, nil
 }
 
-func (ec *executionContext) _Query_TrainerByID(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Query_TrainerByID(ctx, field)
+func (ec *executionContext) _Query_trainerByID(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_trainerByID(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -372,7 +372,7 @@ func (ec *executionContext) _Query_TrainerByID(ctx context.Context, field graphq
 	return ec.marshalNTrainer2ᚖgithubᚗcomᚋsshetty10ᚋgoᚑseedᚑdbᚋmodelᚐTrainer(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Query_TrainerByID(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Query_trainerByID(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Query",
 		Field:      field,
@@ -403,7 +403,7 @@ func (ec *executionContext) fieldContext_Query_TrainerByID(ctx context.Context, 
 		}
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Query_TrainerByID_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+	if fc.Args, err = ec.field_Query_trainerByID_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return
 	}
@@ -2603,7 +2603,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("Query")
-		case "Trainers":
+		case "trainers":
 			field := field
 
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
@@ -2612,7 +2612,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 						ec.Error(ctx, ec.Recover(ctx, r))
 					}
 				}()
-				res = ec._Query_Trainers(ctx, field)
+				res = ec._Query_trainers(ctx, field)
 				if res == graphql.Null {
 					atomic.AddUint32(&invalids, 1)
 				}
@@ -2626,7 +2626,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			out.Concurrently(i, func() graphql.Marshaler {
 				return rrm(innerCtx)
 			})
-		case "TrainerByID":
+		case "trainerByID":
 			field := field
 
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
@@ -2635,7 +2635,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 						ec.Error(ctx, ec.Recover(ctx, r))
 					}
 				}()
-				res = ec._Query_TrainerByID(ctx, field)
+				res = ec._Query_trainerByID(ctx, field)
 				if res == graphql.Null {
 					atomic.AddUint32(&invalids, 1)
 				}

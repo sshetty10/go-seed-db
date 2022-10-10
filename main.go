@@ -4,6 +4,9 @@ import (
 	"context"
 	"log"
 	"net/http"
+
+	"net/http/pprof"
+	_ "net/http/pprof"
 	"os"
 	"time"
 
@@ -31,10 +34,25 @@ func main() {
 
 	a := &API{logger: logger}
 	dbcloser, err := a.ConnectDB(pgaddr)
+	if err != nil {
+		logger.Fatalf("Connection to DB failed %v", err)
+	}
 	defer dbcloser()
 	r := mux.NewRouter()
 	h := r.PathPrefix("/v1").Subrouter()
 	g := r.PathPrefix("/v2").Subrouter()
+
+	// Handlers for profiling
+	r.HandleFunc("/debug/pprof/", pprof.Index)
+	r.HandleFunc("/debug/pprof/cmdline", pprof.Cmdline)
+	r.HandleFunc("/debug/pprof/profile", pprof.Profile)
+	r.HandleFunc("/debug/pprof/symbol", pprof.Symbol)
+
+	// Manually add support for paths linked to by index page at /debug/pprof/
+	r.Handle("/debug/pprof/goroutine", pprof.Handler("goroutine"))
+	r.Handle("/debug/pprof/heap", pprof.Handler("heap"))
+	r.Handle("/debug/pprof/threadcreate", pprof.Handler("threadcreate"))
+	r.Handle("/debug/pprof/block", pprof.Handler("block"))
 
 	//h.Use(auth.Auth0Middleware) check in go-rest-seed
 	h.HandleFunc("/trainer", a.ListTrainers).Methods("GET")

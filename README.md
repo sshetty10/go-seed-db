@@ -23,7 +23,10 @@ http://localhost:8080/v1/trainer/b6fb8b4a-fbc1-498b-9aa7-b6d8770daf7d
 
 ### GQL
 Generate GQL models, generated.go, gqlgenyml:
-GO111MODULE=on go run github.com/99designs/gqlgen -v
+go run github.com/99designs/gqlgen
+go mod download - If running gqlgen wipes out the go.sum entry of gqlgen.
+go build
+
 
 GQL playground
 GetTrainerByID
@@ -41,9 +44,7 @@ GetTrainers
   }
 }
 
-Postman APIs:
-My APIs: Get trainer
 
 ### Run
-1. GO111MODULE=on go build
+1. go build
 2. ./go-seed-db

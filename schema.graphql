@@ -8,6 +8,6 @@ type Trainer {
 }
 
 type Query {
-    Trainers: [Trainer!]!
-    TrainerByID(id: String!): Trainer!
+    trainers: [Trainer!]!
+    trainerByID(id: String!): Trainer!
 }
