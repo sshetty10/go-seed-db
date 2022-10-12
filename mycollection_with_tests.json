@@ -1,0 +1,259 @@
+{
+	"info": {
+		"name": "My Go collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Add Trainer (rest)",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", () => {",
+							"    pm.response.to.have.status(201);",
+							"})",
+							"",
+							"var resp = pm.response.json();",
+							"pm.environment.set(\"tid\",resp.data.id);",
+							"console.log(pm.environment.get(\"tid\"));",
+							"",
+							"pm.test(\"validate the name\",function () {",
+							"    pm.expect(resp.data.name).to.eql(\"Trainer 4\");",
+							"});",
+							"",
+							"postman.setNextRequest(\"GQL GetTrainerByID\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\":\"Trainer 4\",\n\t\"age\":28,\n\t\"city\":\"MD\",\n    \"licenseID\":\"MD-48549\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/v1/trainer",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"trainer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GQL GetTrainerByID",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", () => {",
+							"    pm.response.to.have.status(200);",
+							"})",
+							"",
+							"var resp = pm.response.json();",
+							"",
+							"pm.test(\"validate the name\",function () {",
+							"    pm.expect(resp.data.trainerByID.name).to.eql(\"Trainer 4\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "query{\n\ttrainerByID(id:\"{{tid}}\"){\n    id\n    name\n    city\n    licenseID\n    licenseState\n    }\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/v2/gql",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v2",
+						"gql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GQL List Trainers",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "query{\n\ttrainers{\n    id\n    name\n    city\n    licenseID\n    licenseState\n    }\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/v2/gql",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v2",
+						"gql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GQL Get Trainer By ID (multiple)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "{\n\tTrainer1:trainerByID(id:\"b6fb8b4a-fbc1-498b-9aa7-b6d8770daf7d\"){\n    name\n  }\n  Trainer2:trainerByID(id:\"{{tid}}\"){\n    name\n  }\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/v2/gql",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v2",
+						"gql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List Trainers (rest)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"postman.setNextRequest(\"Delete Trainer (rest)\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/v1/trainers",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"trainers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Trainer (rest)",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", () => {",
+							"    pm.response.to.have.status(200);",
+							"})",
+							"",
+							"pm.test(\"Message that trainer is deleted\",function () {",
+							"    var resp = pm.response.json();",
+							"    pm.expect(resp.data).to.eql(\"Trainer Deleted\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/v1/trainer/{{tid}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"trainer",
+						"{{tid}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

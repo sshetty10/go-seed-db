@@ -24,7 +24,7 @@ http://localhost:8080/v1/trainer/b6fb8b4a-fbc1-498b-9aa7-b6d8770daf7d
 ### GQL
 Generate GQL models, generated.go, gqlgenyml:
 go run github.com/99designs/gqlgen
-go mod download - If running gqlgen wipes out the go.sum entry of gqlgen.
+go get github.com/99designs/gqlgen@v0.17.20 - If running gqlgen wipes out the go.sum entry of gqlgen. Run gqlgen again.
 go build
 
 
