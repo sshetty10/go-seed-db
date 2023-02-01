@@ -46,3 +46,18 @@ func BenchmarkLicenseState(b *testing.B) {
 		resolver.Trainer().LicenseState(ctx, tr)
 	}
 }
+
+/*
+// Benchmarking with a range of inputs
+
+func benchmarkLicenseState(tr *model.Trainer, b *testing.B) {
+    ctx := context.Background()
+    for i := 0; i < b.N; i++ {
+        resolver.Trainer().LicenseState(ctx, tr)
+    }
+}
+
+func BenchmarkLicenseState1(b *testing.B)  { benchmarkLicenseState(&model.Trainer{ID:id,Name:"foo",City:"bar",Age:70,LicenseID: "VA-38274",}, b) }
+func BenchmarkLicenseState2(b *testing.B)  { benchmarkLicenseState(&model.Trainer{ID:id,Name:"foo",City:"bar",Age:70,LicenseID: "MD-38274",}, b) }
+func BenchmarkLicenseState3(b *testing.B)  { benchmarkLicenseState(&model.Trainer{ID:id,Name:"foo",City:"bar",Age:70,LicenseID: "NY-38274",}, b) }
+*/
